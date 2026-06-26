@@ -1,0 +1,352 @@
+import nltk
+from nltk.stem import SnowballStemmer
+from nltk.corpus import stopwords
+import numpy as np
+import math
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+# Descargamos las palabras vacías en español
+nltk.download('stopwords', quiet=True)
+palabras_vacias = set(stopwords.words('spanish'))
+
+stemmer = SnowballStemmer('spanish')
+
+
+# 1. TEXTOS SEMILLA
+# aqui estan todos los textos semilla, un texto semilla son los textos en donde el programa decide que palabras son de cada tema y que valor tiene cada una
+
+#  TEMA: PROGRAMACIÓN 
+raiz_programacion1 = "La programación informática es el pilar fundamental del desarrollo de software moderno. En su esencia, consiste en diseñar, estructurar y escribir un conjunto de instrucciones ordenadas para que un procesador las ejecute de manera lógica. Este proceso se realiza mediante lenguajes de programación, los cuales actúan como puentes de comunicación entre la mente humana y la arquitectura física del hardware.Cualquier algoritmo complejo se construye a partir de estructuras básicas de control. Las variables almacenan datos dinámicos en la memoria, mientras que las funciones encapsulan bloques de código reutilizables para optimizar el rendimiento del sistema. Los bucles determinan la repetición controlada de un proceso, y los condicionales permiten la toma de decisiones basadas en eventos específicos. Cuando combinamos estos elementos con estructuras de datos avanzadas, como matrices, listas y diccionarios, los desarrolladores pueden modelar problemas complejos del mundo real de forma puramente digital.A medida que los proyectos crecen, el paradigma de desarrollo evoluciona hacia la programación orientada a objetos o la programación funcional. Aquí, conceptos como la abstracción, el encapsulamiento y la herencia permiten modularizar el software, reduciendo errores y facilitando la depuración del código fuente. Una vez escrito el script, entra en juego el compilador o el intérprete, herramientas encargadas de traducir el lenguaje de alto nivel a código máquina de bajo nivel, comprensible para los circuitos integrados.Hoy en día, el desarrollo de software abarca múltiples disciplinas especializadas, desde la gestión de bases de datos relacionales y el despliegue de servidores, hasta la implementación de lógica en sistemas operativos. Dominar la sintaxis es solo el primer paso; el verdadero desafío del programador radica en refinar la lógica algorítmica para escribir código limpio, eficiente y escalable."
+
+raiz_programacion2 = "El desarrollo de aplicaciones requiere una comprensión profunda del ciclo de vida del software y de la interacción entre sistemas. Cuando un programador escribe líneas de código en un editor, está creando código fuente que debe pasar por fases estrictas de verificación. La ingeniería de software moderna se apoya en metodologías ágiles para asegurar que los requisitos del sistema se traduzcan de manera fiel en módulos funcionales estables, independientes y altamente eficientes.En los entornos de ejecución actuales, la gestión de la memoria RAM and la optimización de los hilos de procesamiento son tareas críticas. Los desarrolladores utilizan herramientas de depuración avanzadas para localizar fugas de memoria, cuellos de botella y excepciones en tiempo de ejecución. Además, la integración de librerías externas y entornos virtuales facilita la compatibilidad entre diferentes sistemas operativos, permitiendo que un mismo programa sea escalable and se ejecute sin alteraciones en servidores locales o infraestructuras en la nube.La automatización de procesos mediante scripts independientes es otra faceta clave del programador. Estos scripts interactúan frecuentemente con APIs para el intercambio dinámico de datos en formato JSON y gestionan la persistencia de la información en bases de datos mediante consultas optimizadas. Comprender cómo se comunican estos componentes a bajo nivel permite a los ingenieros diseñar arquitecturas robustas que soportan altas tasas de concurrencia de usuarios en tiempo real.Finalmente, la seguridad del código y el control de versiones son indispensables en cualquier proyecto tecnológico. Utilizar repositorios para registrar el historial de cambios permite el trabajo colaborativo entre múltiples desarrolladores sin sobrescribir las funciones existentes. El objetivo final de todo este flujo técnico es compilar una aplicación que no solo resuelva un problema puntual, sino que mantenga un rendimiento óptimo bajo condiciones extremas de estrés informático."
+
+raiz_programacion3 = "El ecosistema del desarrollo web moderno exige el dominio de arquitecturas distribuidas y la manipulación de flujos de datos asíncronos. Cuando un cliente realiza una petición a través del navegador, se inicia un ciclo de comunicación basado en protocolos como HTTP o WebSockets. La responsabilidad del programador en el backend radica en diseñar servicios capaces de procesar estas solicitudes, interactuar con la capa de persistencia y devolver una respuesta estructurada que el frontend pueda renderizar de manera óptima y sin bloqueos en la interfaz de usuario.La construcción de APIs REST eficientes requiere implementar un enrutamiento lógico y controladores específicos para cada recurso del sistema. En estos entornos, el manejo de hilos no bloqueantes y la programación reactiva permiten gestionar miles de conexiones concurrentes. Los desarrolladores deben configurar middlewares para validar los tokens de autenticación, parsear los cuerpos de las peticiones en formatos como JSON o XML, y capturar de forma centralizada cualquier error de ejecución que pueda comprometer la estabilidad del servidor en producción.Por otro lado, la optimización del rendimiento en aplicaciones web implica diseñar estrategias de almacenamiento en caché utilizando sistemas en memoria. Reducir las consultas directas a la base de datos mediante la indexación de tablas y el diseño de modelos relacionales eficientes previene la degradación del servicio bajo alta demanda. El despliegue automatizado de estos microservicios mediante contenedores garantiza que el entorno de ejecución sea idéntico tanto en la computadora del programador como en los servidores en la nube.En conclusión, el desarrollo para la web ha evolucionado de simples páginas estáticas a complejos sistemas distribuidos. Un buen código backend no solo debe resolver la lógica del negocio, sino garantizar la seguridad de la información, la baja latencia en las respuestas y una escalabilidad horizontal eficiente ante el crecimiento continuo de la plataforma."
+
+
+#  TEMA: COCHES 
+raiz_coches1 = "La ingeniería de la automoción moderna combina la mecánica de precisión con la electrónica avanzada para optimizar el rendimiento y la seguridad vial. En el corazón de cualquier vehículo convencional se encuentra el motor de combustión interna, cuyo funcionamiento térmico depende de la sincronización exacta entre los pistones, las válvulas y los árboles de levas. La cilindrada y la configuración de los cilindros determinan tanto el par motor como la potencia máxima transmitida al cigüeñal. Sin embargo, la industria experimenta una transición profunda hacia la electrificación, impulsada por motores eléctricos sincrónicos y baterías de iones de litio de alta densidad que redefinen la eficiencia energética en el transporte.La dinámica de conducción y la estabilidad del automóvil están estrechamente ligadas al diseño del chasis y del sistema de suspensión. Los amortiguadores y las barras estabilizadoras absorben las irregularidades del firme, garantizando la adherencia de los neumáticos en curvas cerradas. Por otro lado, el sistema de transmisión —ya sea mediante una caja de cambios manual o una transmisión automática de doble embrague— distribuye la fuerza motriz de manera óptima hacia las ruedas mediante diferenciales adaptativos. Dependiendo del propósito del coche, los ingenieros optan por configuraciones de tracción delantera, propulsión trasera o tracción total en las cuatro ruedas.La seguridad activa y pasiva constituye otro pilar fundamental en el desarrollo de vehículos actuales. Dispositivos como los frenos de disco ventilados se complementan con sistemas electrónicos de asistencia, tales como el antibloqueo ABS y el control de estabilidad ESP, para prevenir la pérdida de control bajo condiciones climáticas adversas. Asimismo, la carrocería monocasco utiliza aceros de alta resistencia diseñados con zonas de deformación programada para absorber la energía en caso de impacto. Finalmente, el coeficiente aerodinámico influye directamente en el consumo de combustible y en el comportamiento dinámico a altas velocidades, obligando a los diseñadores a perfeccionar las líneas en los túneles de viento."
+raiz_coches2 = "Peugeot, Toyota, Ferrari, Ford, Mercedes-Benz, Porsche, Renault, Hyundai, Honda, El desarrollo de motores de alto rendimiento exige un control riguroso de la termodinámica y de los fluidos que intervienen en la combustión. En la actualidad, la sobrealimentación mediante turbocompresores se ha consolidado como la solución estándar para incrementar la eficiencia volumétrica sin necesidad de aumentar el tamaño físico del bloque motor. Este componente aprovecha la energía remanente de los gases de escape para impulsar una turbina acoplada a un compresor, el cual introduce aire a mayor presión en los colectores de admisión. Para contrarrestar el incremento de temperatura derivado de la compresión, el aire pasa a través de un intercooler antes de entrar a la cámara de combustión, optimizando la densidad de la mezcla estequiométrica y maximizando el rendimiento térmico.La gestión electrónica del motor se realiza a través de la unidad de control o ECU, encargada de monitorizar en tiempo real múltiples sensores distribuidos por el coche. Parámetros como la posición del acelerador, el caudal de aire y las revoluciones por minuto dictan el mapa de inyección exacta, regulando los milisegundos de apertura de los inyectores de alta presión. Paralelamente, los gases residuales son tratados en el sistema de escape mediante catalizadores y filtros de partículas de última generación para minimizar las emisiones contaminantes antes de ser liberados a la atmósfera.Desde el punto de vista dinámico, el comportamiento del vehículo se define por la transferencia de pesos durante las fases de aceleración y frenada. La geometría de la suspensión, junto con la rigidez torsional del chasis, determina cómo se distribuyen las fuerzas laterales sobre los neumáticos en pleno apoyo. Una correcta alineación de los ejes —controlando factores como la convergencia y la caída— resulta crucial para evitar el desgaste prematuro de las cubiertas y mitigar los efectos del subviraje o sobreviraje, garantizando una respuesta ágil y predecible al girar el volante."
+raiz_coches3 = "Carrera, contrincante, velocidad, kilometros, gasolina, Tener un coche hoy en día es algo muy común para la mayoría de las personas, ya que nos permite viajar de un sitio a otro con mucha comodidad. Cuando te subes a un coche, lo primero que haces es arrancar el motor y poner las manos en el volante para dirigir el vehículo por la carretera. Para que el coche se mueva con seguridad, es fundamental que las cuatro ruedas tengan una buena presión y que los neumáticos no estén gastados, sobre todo cuando el suelo está mojado por la lluvia o hay hielo en el camino.El funcionamiento básico de un coche de calle no es tan difícil de entender. Cuando pisas el pedal del acelerador, el motor recibe más combustible y el coche empieza a ir más rápido. Por el contrario, si necesitas reducir la velocidad o detenerte por completo ante un semáforo en rojo, tienes que pisar el pedal del freno. Los frenos son la parte más importante para la seguridad de los pasajeros. Además, si el coche es manual, el conductor debe usar la palanca de cambios para meter la primera marcha, la segunda o la marcha atrás, dependiendo de si va despacio por la ciudad o rápido por la autopista.Dentro del coche, también viajamos cómodos gracias a los asientos y al aire acondicionado, que nos calienta en invierno y nos da frío en verano. En el maletero podemos guardar las maletas cuando nos vamos de vacaciones con la familia. Cuidar el coche es tarea de todos; hay que llevarlo al taller para cambiar el aceite, revisar que las luces funcionen bien por la noche y limpiar los cristales para ver bien la carretera al conducir."
+
+
+#  TEMA: AJEDREZ 
+raiz_ajedrez1 = "El ajedrez es un juego de estrategia milenario que se desarrolla sobre un tablero de sesenta y cuatro casillas alternadas en colores claros y oscuros. Cada jugador inicia la partida controlando un ejército de dieciséis piezas: ocho peones, dos torres, dos caballos, dos alfiles, una dama y el rey. La dinámica del juego se divide tradicionalmente en tres fases: la apertura, el medio juego y el final. Durante la apertura, los contrincantes buscan controlar el centro del tablero y desarrollar sus piezas menores mediante líneas teóricas bien estudiadas, protegiendo a su monarca mediante el movimiento estratégico del enroque, ya sea corto o largo.A medida que las piezas avanzan, la partida entra en el medio juego, donde la táctica y la estrategia dictan el destino de las fuerzas sobre el escaque. Los jugadores analizan amenazas constantes, calculando combinaciones complejas que involucran conceptos como la clavada, la horquilla de caballo, el ataque a la descubierta o el sacrificio de una pieza para ganar ventaja posicional o material. Las torres buscan dominar las columnas abiertas, mientras que la dama se despliega como la pieza más poderosa y versátil del tablero, capaz de inclinar la balanza con un ataque directo.El objetivo definitivo de la contienda es acorralar al rey rival hasta dictaminar el jaque mate, una situación irreversible donde el líder enemigo no tiene escapatoria legal. Sin embargo, si un jugador no dispone de movimientos válidos pero su rey no se encuentra amenazado, la partida concluye inmediatamente en un empate por ahogado. Las tablas también pueden acordarse por mutuo consentimiento, por triple repetición de posiciones o por insuficiencia material para forzar la victoria, demostrando que este deporte mental exige una precisión absoluta desde el primer movimiento de peón."
+raiz_ajedrez2 = "El ajedrez de alta competición es un deporte electrónico y mental de una exigencia extrema, regulado a nivel global por la Federación Internacional de Ajedrez. La cúspide de la gloria profesional se alcanza al disputar el Campeonato del Mundo, un duelo directo donde se corona al monarca absoluto tras superar el exigente Torneo de Candidatos. A lo largo de la historia, leyendas de la disciplina como Garry Kasparov, Anatoly Karpov y Bobby Fischer han protagonizado enfrentamientos memorables que revolucionaron la teoría del juego. En la era contemporánea, el gran maestro Magnus Carlsen ha dominado los ránkings de puntuación Elo, desafiado de cerca por prodigios de la élite internacional como Hikaru Nakamura, Fabiano Caruana o el joven Alireza Firouzja.Los torneos más prestigiosos del circuito profesional, como el Tata Steel Chess en Wijk aan Zee, el prestigioso torneo de la Copa del Mundo o el Grand Chess Tour, reúnen anualmente a los mejores jugadores del planeta. En estos eventos, las partidas se disputan bajo estrictos controles de tiempo medidos por un reloj digital, dividiéndose en modalidades de ritmo clásico, rápido o blitz (relámpago), donde los competidores deben realizar movimientos complejos en cuestión de pocos segundos.La preparación de un jugador de élite implica miles de horas analizando variantes complejas con la ayuda de potentes motores de análisis informático como Stockfish o la inteligencia artificial AlphaZero. Los profesionales estudian minuciosamente las debilidades en el repertorio de aperturas de sus rivales, buscando novedades teóricas para sorprenderlos sobre el tablero. Cada victoria en estas competiciones de primer nivel otorga valiosos puntos para el sistema de puntuación internacional, consolidando el estatus del jugador y acercándolo al ansiado título vitalicio de Gran Maestro Internacional."
+raiz_ajedrez3 = "La historia del ajedrez es un viaje fascinante que se extiende por más de mil quinientos años y conecta a diversas culturas de todo el mundo. Los historiadores coinciden en que sus orígenes más remotos se encuentran en la India del siglo VI, donde se jugaba un juego ancestral llamado chaturanga. Este juego representaba a las cuatro fuerzas del ejército indio de la época: la infantería, la caballería, los elefantes y los carros de guerra, componentes que siglos más tarde se transformarían en los peones, caballos, alfiles y torres actuales. Desde la India, la práctica se difundió rápidamente hacia Persia bajo el nombre de shatranj, donde caló hondo en la corte de los reyes de Oriente Medio.Con la expansión del mundo árabe, este entretenimiento intelectual penetró en el continente europeo a través de la península ibérica durante la Edad Media. Fue precisamente en Europa, hacia finales del siglo XV, donde el juego experimentó sus reformas más radicales para convertirse en la disciplina dinámica que conocemos hoy en día. Se introdujeron las reglas modernas, otorgando un poder sin precedentes a la dama y permitiendo al alfil desplazarse a lo largo de diagonales completas, lo que aceleró notablemente el ritmo de las partidas.El siglo XIX marcó el nacimiento de los torneos internacionales organizados y el surgimiento del primer campeón mundial oficial, Wilhelm Steinitz, en 1886. El juego dejó de ser un pasatiempo de la aristocracia para transformarse en una ciencia social y cultural. Durante el siglo XX, la Guerra Fría lo convirtió en un escenario de rivalidad geopolítica masiva entre la Unión Soviética y Occidente, un legado histórico imborrable que consolidó al juego de las sesenta y cuatro casillas como el rey absoluto de los deportes mentales."
+
+
+#  TEMA: MÚSICA 
+raiz_musica1 = "La música es un arte universal que se construye a partir de la combinación lógica de sonidos y silencios, estructurados mediante la melodía, la armonía y el ritmo. La teoría musical organiza estas frecuencias en una escala de siete notas fundamentales: do, re, mi, fa, sol, la y si, las cuales se representan gráficamente sobre las líneas y espacios de un pentagrama usando claves como la de sol o la de fa. Para alterar la altura de estos tonos, los compositores emplean alteraciones como el sostenido y el bemol, definiendo así los acordes, los intervalos y la tonalidad de la pieza, ya sea en una escala mayor o menor, mientras que el metrónomo dicta el tempo y el compás de la obra.La ejecución de una partitura cobra vida a través de los instrumentos musicales, divididos tradicionalmente en varias familias. En la sección de cuerda pulsada o frotada destacan el violín, la guitarra acústica, el violonchelo y el contrabajo, además del piano, un instrumento de cuerda percutida sumamente versátil. El viento madera y metal aporta texturas únicas gracias a la flauta travesera, el clarinete, el saxofón, la trompeta y el trombón. Finalmente, la percusión —marcada por la batería, los platillos, el tambor y los timbales— establece la base rítmica y los latidos de la composición, guiados en una orquesta sinfónica por el director.En la era moderna, el arte musical abarca infinidad de géneros que van desde la complejidad del jazz y la ópera clásica, hasta la energía del rock, el pop y la música electrónica. Hoy en día, las canciones no solo se interpretan en directo sobre un escenario, sino que se graban en un estudio de sonido utilizando micrófonos, sintetizadores y software de producción digital para ecualizar las pistas, mezclar las frecuencias de la voz y masterizar el álbum definitivo."
+raiz_musica2 = "La evolución de la música a lo largo de la historia refleja la transformación cultural, tecnológica y social de la humanidad. En sus orígenes más primitivos, la música prehistórica estaba ligada a rituales espirituales, utilizando la voz humana y rudimentarios instrumentos de percusión hechos de hueso, madera y piedra. Con el desarrollo de las grandes civilizaciones, la Grecia clásica sentó las primeras bases de la teoría musical y la acústica matemática. Posteriormente, durante la Edad Media, el canto gregoriano dominó las catedrales europeas hasta que la llegada del Renacimiento dio paso a la polifonía y al nacimiento de sistemas de notación más precisos sobre el pentagrama.El período barroco supuso una revolución gracias a compositores como Johann Sebastian Bach, quienes perfeccionaron el contrapunto y la armonía tonal, abriendo las puertas al Clasicismo de Mozart y Beethoven, donde la estructura de la sinfonía y la sonata alcanzaron su máxima pureza formal. El siglo XIX trajo consigo el Romanticismo, una etapa donde la orquesta sinfónica se expandió masivamente para expresar emociones individuales profundas, desafiando las rigideces académicas previas.La verdadera ruptura llegó en el siglo XX. El nacimiento del jazz, el blues y la posterior explosión del rock and roll cambiaron radicalmente el panorama popular mundial, democratizando el acceso al arte sonoro. Paralelamente, la invención de la grabación fonográfica, la radio y los amplificadores permitieron que las composiciones se inmortalizaran y viajaran por todo el planeta. En las últimas décadas, la tecnología digital y los sintetizadores han completado esta metamorfosis, dando origen a la música electrónica y urbana, demostrando que el arte de combinar sonidos nunca deja de reinventarse."
+raiz_musica3 = "orquesta, ritmo, pulso, negra, blanca, redonda, corchea, semicorchea, garrapatea, semigarrapatea, clave, tocar, banda, melodia, tono, acorde, nota, compas, escala, intervalo, timbre, sincopa, sostenido, bemol, estribillo, estrofa, armadura, compositor, El impacto de la música en la mente humana va mucho más allá del simple entretenimiento; constituye un fenómeno neurológico profundo que altera nuestra psicología y fisiología. Cuando las ondas sonoras entran por el canal auditivo, el cerebro no solo procesa frecuencias y decibelios, sino que activa múltiples áreas simultáneamente, desde la corteza motora hasta el sistema límbico, responsable de regular las emociones. Esta conexión directa con la neurobiología explica por qué una melodía melancólica en piano puede evocar nostalgia profunda o por qué un ritmo acelerado de batería es capaz de aumentar la frecuencia cardíaca y liberar dopamina, la hormona del placer y la motivación.En el ámbito cognitivo, escuchar o interpretar música funciona como un gimnasio cerebral completo. Diversos estudios demuestran que los niños que aprenden a tocar un instrumento desarrollan una mayor plasticidad neuronal, mejorando sus habilidades lingüísticas, la memoria de trabajo y la orientación espacial. Además, en la sociedad actual, el diseño sonoro se utiliza estratégicamente en la musicoterapia para tratar trastornos como la ansiedad, el estrés crónico e incluso para estimular las conexiones sinápticas en pacientes con enfermedades neurodegenerativas como el Alzheimer, ayudándoles a recuperar recuerdos perdidos a través de canciones de su pasado.Por último, la música posee una vertiente sociocultural identitaria innegable. Funciona como un lenguaje no verbal que une a comunidades enteras en conciertos, festivales y manifestaciones, rompiendo barreras idiomáticas. Ya sea para concentrarnos al estudiar, darnos energía al hacer ejercicio o acompañarnos en momentos de soledad, los sonidos organizados alteran activamente nuestra percepción de la realidad, demostrando que somos una especie intrínsecamente musical."
+
+
+
+# 2. FILTRADO DE TEXTOS
+# aqui se retiran los puntos y comas de los textos, las mayusculas, las palabras de tres letras o menos, ademas de quitar palabras duplicadas y dejar solo la raiz de cada palabra, esto para facilitar y hacer mas eficiente los siguientes calculos
+
+#  Programación 
+raiz_programacion1_limpio = raiz_programacion1.replace(".", "").replace(",", "").lower().split()
+raices_raiz_programacion1 = [stemmer.stem(i) for i in raiz_programacion1_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_programacion1_final = set(raices_raiz_programacion1)
+
+raiz_programacion2_limpio = raiz_programacion2.replace(".", "").replace(",", "").lower().split()
+raices_raiz_programacion2 = [stemmer.stem(i) for i in raiz_programacion2_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_programacion2_final = set(raices_raiz_programacion2)
+
+raiz_programacion3_limpio = raiz_programacion3.replace(".", "").replace(",", "").lower().split()
+raices_raiz_programacion3 = [stemmer.stem(i) for i in raiz_programacion3_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_programacion3_final = set(raices_raiz_programacion3)
+
+
+#  Coches 
+raiz_coches1_limpio = raiz_coches1.replace(".", "").replace(",", "").lower().split()
+raices_raiz_coches1 = [stemmer.stem(i) for i in raiz_coches1_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_coches1_final = set(raices_raiz_coches1)
+
+raiz_coches2_limpio = raiz_coches2.replace(".", "").replace(",", "").lower().split()
+raices_raiz_coches2 = [stemmer.stem(i) for i in raiz_coches2_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_coches2_final = set(raices_raiz_coches2)
+
+raiz_coches3_limpio = raiz_coches3.replace(".", "").replace(",", "").lower().split()
+raices_raiz_coches3 = [stemmer.stem(i) for i in raiz_coches3_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_coches3_final = set(raices_raiz_coches3)
+
+
+#  Ajedrez 
+raiz_ajedrez1_limpio = raiz_ajedrez1.replace(".", "").replace(",", "").lower().split()
+raices_raiz_ajedrez1 = [stemmer.stem(i) for i in raiz_ajedrez1_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_ajedrez1_final = set(raices_raiz_ajedrez1)
+
+raiz_ajedrez2_limpio = raiz_ajedrez2.replace(".", "").replace(",", "").lower().split()
+raices_raiz_ajedrez2 = [stemmer.stem(i) for i in raiz_ajedrez2_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_ajedrez2_final = set(raices_raiz_ajedrez2)
+
+raiz_ajedrez3_limpio = raiz_ajedrez3.replace(".", "").replace(",", "").lower().split()
+raices_raiz_ajedrez3 = [stemmer.stem(i) for i in raiz_ajedrez3_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_ajedrez3_final = set(raices_raiz_ajedrez3)
+
+
+#  Música 
+raiz_musica1_limpio = raiz_musica1.replace(".", "").replace(",", "").lower().split()
+raices_raiz_musica1 = [stemmer.stem(i) for i in raiz_musica1_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_musica1_final = set(raices_raiz_musica1)
+
+raiz_musica2_limpio = raiz_musica2.replace(".", "").replace(",", "").lower().split()
+raices_raiz_musica2 = [stemmer.stem(i) for i in raiz_musica2_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_musica2_final = set(raices_raiz_musica2)
+
+raiz_musica3_limpio = raiz_musica3.replace(".", "").replace(",", "").lower().split()
+raices_raiz_musica3 = [stemmer.stem(i) for i in raiz_musica3_limpio if len(i) > 3 and i not in palabras_vacias]
+raiz_musica3_final = set(raices_raiz_musica3)
+
+
+
+# 3. CÁLCULO DE FRECUENCIAS DE TÉRMINO (TF)
+# es uno de los terminos que nos ayudará a saber el valor de cada palabra, se basa en saber la frecuencia con la que cada palabra aparece en un tipo de texto u otro
+
+#  Programación 
+frecuencias_tfRPF1 = {i: raices_raiz_programacion1.count(i) / len(raices_raiz_programacion1) for i in raiz_programacion1_final}
+frecuencias_tfRPF2 = {i: raices_raiz_programacion2.count(i) / len(raices_raiz_programacion2) for i in raiz_programacion2_final}
+frecuencias_tfRPF3 = {i: raices_raiz_programacion3.count(i) / len(raices_raiz_programacion3) for i in raiz_programacion3_final}
+
+#  Coches 
+frecuencias_tfRCF1 = {i: raices_raiz_coches1.count(i) / len(raices_raiz_coches1) for i in raiz_coches1_final}
+frecuencias_tfRCF2 = {i: raices_raiz_coches2.count(i) / len(raices_raiz_coches2) for i in raiz_coches2_final}
+frecuencias_tfRCF3 = {i: raices_raiz_coches3.count(i) / len(raices_raiz_coches3) for i in raiz_coches3_final}
+
+#  Ajedrez 
+frecuencias_tfRAF1 = {i: raices_raiz_ajedrez1.count(i) / len(raices_raiz_ajedrez1) for i in raiz_ajedrez1_final}
+frecuencias_tfRAF2 = {i: raices_raiz_ajedrez2.count(i) / len(raices_raiz_ajedrez2) for i in raiz_ajedrez2_final}
+frecuencias_tfRAF3 = {i: raices_raiz_ajedrez3.count(i) / len(raices_raiz_ajedrez3) for i in raiz_ajedrez3_final}
+
+#  Música 
+frecuencias_tfRMF1 = {i: raices_raiz_musica1.count(i) / len(raices_raiz_musica1) for i in raiz_musica1_final}
+frecuencias_tfRMF2 = {i: raices_raiz_musica2.count(i) / len(raices_raiz_musica2) for i in raiz_musica2_final}
+frecuencias_tfRMF3 = {i: raices_raiz_musica3.count(i) / len(raices_raiz_musica3) for i in raiz_musica3_final}
+
+
+
+# 4. VOCABULARIO GLOBAL E IDF (FRECUENCIA INVERSA DE DOCUMENTO)
+# ahora calculamos el IDF, tambien sirve para saber la importancia de cada palabra, mide en cuantos textos distintos aparece cada palabra
+
+# Unimos el vocabulario único de absolutamente todos los textos semilla
+vocabulario_global = (
+    raiz_programacion1_final | raiz_programacion2_final | raiz_programacion3_final |
+    raiz_coches1_final | raiz_coches2_final | raiz_coches3_final |
+    raiz_ajedrez1_final | raiz_ajedrez2_final | raiz_ajedrez3_final |
+    raiz_musica1_final | raiz_musica2_final | raiz_musica3_final
+)
+
+todos_los_documentos = [
+    raiz_programacion1_final, raiz_programacion2_final, raiz_programacion3_final,
+    raiz_coches1_final, raiz_coches2_final, raiz_coches3_final,
+    raiz_ajedrez1_final, raiz_ajedrez2_final, raiz_ajedrez3_final,
+    raiz_musica1_final, raiz_musica2_final, raiz_musica3_final
+]
+total_documentos = len(todos_los_documentos)  # 12 documentos en total
+
+valores_idf = {}
+for palabra in vocabulario_global:
+    documentos_con_la_palabra = 0
+    for doc in todos_los_documentos:
+        if palabra in doc:
+            documentos_con_la_palabra += 1
+            
+    valores_idf[palabra] = math.log(total_documentos / documentos_con_la_palabra) + 1
+
+
+
+# 5. CREACIÓN DE LOS VECTORES TF-IDF SEMILLA
+# ahora que tenemos tanto el TF como el IDF, calculamos el valor de cada palabra
+lista_vocabulario = list(vocabulario_global)
+
+# Vectores numéricos finales para cada texto
+v_prog1, v_prog2, v_prog3 = [], [], []
+v_coch1, v_coch2, v_coch3 = [], [], []
+v_ajed1, v_ajed2, v_ajed3 = [], [], []
+v_musi1, v_musi2, v_musi3 = [], [], []
+
+for palabra in lista_vocabulario:
+    idf = valores_idf.get(palabra, 0)
+    
+    # Programación
+    v_prog1.append(frecuencias_tfRPF1.get(palabra, 0) * idf)
+    v_prog2.append(frecuencias_tfRPF2.get(palabra, 0) * idf)
+    v_prog3.append(frecuencias_tfRPF3.get(palabra, 0) * idf)
+    
+    # Coches
+    v_coch1.append(frecuencias_tfRCF1.get(palabra, 0) * idf)
+    v_coch2.append(frecuencias_tfRCF2.get(palabra, 0) * idf)
+    v_coch3.append(frecuencias_tfRCF3.get(palabra, 0) * idf)
+    
+    # Ajedrez
+    v_ajed1.append(frecuencias_tfRAF1.get(palabra, 0) * idf)
+    v_ajed2.append(frecuencias_tfRAF2.get(palabra, 0) * idf)
+    v_ajed3.append(frecuencias_tfRAF3.get(palabra, 0) * idf)
+    
+    # Música
+    v_musi1.append(frecuencias_tfRMF1.get(palabra, 0) * idf)
+    v_musi2.append(frecuencias_tfRMF2.get(palabra, 0) * idf)
+    v_musi3.append(frecuencias_tfRMF3.get(palabra, 0) * idf)
+
+
+
+# 6. FUNCIÓN MATEMÁTICA DE SIMILITUD
+# mide que tan parecido es el texto a analizar respecto a los datos de los textos semilla
+def calcular_similitud_coseno(vector_a, vector_b):
+    producto_escalar = sum(a * b for a, b in zip(vector_a, vector_b))
+    norma_a = math.sqrt(sum(a**2 for a in vector_a))
+    norma_b = math.sqrt(sum(b**2 for b in vector_b))
+    
+    if norma_a == 0 or norma_b == 0:
+        return 0.0
+        
+    return producto_escalar / (norma_a * norma_b)
+
+
+
+# 7. FUNCIÓN CONECTADA AL BOTÓN (CON TUS ENLACES DE VARIABLES CORRECTOS)
+# sirve para conectar los calculos realizados con el apartado gráfico
+def analizar_texto_usuario():
+    # 1. Capturar el texto ingresado en el cuadro gráfico de Tkinter
+    texto = caja_texto.get("1.0", tk.END).strip()
+    if not texto or texto == "Escribe o pega aquí tu texto...":
+        messagebox.showwarning("Atención", "Por favor, introduce algún texto para analizar.")
+        return
+        
+    # 2. Limpieza y Lemmatización dinámica
+    texto_usuario_limpio = texto.replace(".", "").replace(",", "").lower().split()
+    raices_texto_usuario = [stemmer.stem(i) for i in texto_usuario_limpio if len(i) > 3 and i not in palabras_vacias]
+    
+    if not raices_texto_usuario:
+        lbl_veredicto.config(text="TEXTO DEMASIADO CORTO O SIN PALABRAS CLAVE", fg="#ff4d4d")
+        return
+        
+    # 3. Calcular frecuencias (TF) del texto del usuario
+    frecuencias_tf_usuario = {}
+    for i in set(raices_texto_usuario):
+        frecuencias_tf_usuario[i] = raices_texto_usuario.count(i) / len(raices_texto_usuario)
+        
+    # 4. Generar Vector TF-IDF del usuario
+    vector_tf_idf_usuario = []
+    for palabra in lista_vocabulario:
+        tf_u = frecuencias_tf_usuario.get(palabra, 0)
+        idf_u = valores_idf.get(palabra, 0)          
+        vector_tf_idf_usuario.append(tf_u * idf_u)
+        
+    # 5. Comparar similitud contra tus 12 vectores semilla originales
+    sim_prog1 = calcular_similitud_coseno(vector_tf_idf_usuario, v_prog1)
+    sim_prog2 = calcular_similitud_coseno(vector_tf_idf_usuario, v_prog2)
+    sim_prog3 = calcular_similitud_coseno(vector_tf_idf_usuario, v_prog3)
+
+    sim_coch1 = calcular_similitud_coseno(vector_tf_idf_usuario, v_coch1)
+    sim_coch2 = calcular_similitud_coseno(vector_tf_idf_usuario, v_coch2)
+    sim_coch3 = calcular_similitud_coseno(vector_tf_idf_usuario, v_coch3)
+
+    sim_ajed1 = calcular_similitud_coseno(vector_tf_idf_usuario, v_ajed1)
+    sim_ajed2 = calcular_similitud_coseno(vector_tf_idf_usuario, v_ajed2)
+    sim_ajed3 = calcular_similitud_coseno(vector_tf_idf_usuario, v_ajed3)
+
+    sim_musi1 = calcular_similitud_coseno(vector_tf_idf_usuario, v_musi1)
+    sim_musi2 = calcular_similitud_coseno(vector_tf_idf_usuario, v_musi2)
+    sim_musi3 = calcular_similitud_coseno(vector_tf_idf_usuario, v_musi3)
+
+    # Buscar máximos locales por tópico
+    max_programacion = max(sim_prog1, sim_prog2, sim_prog3)
+    max_coches = max(sim_coch1, sim_coch2, sim_coch3)
+    max_ajedrez = max(sim_ajed1, sim_ajed2, sim_ajed3)
+    max_musica = max(sim_musi1, sim_musi2, sim_musi3)
+
+    # 6. Actualizar las barras gráficas y sus etiquetas porcentuales (.set multiplica por 100)
+    p_prog.set(max_programacion * 100)
+    p_coch.set(max_coches * 100)
+    p_ajed.set(max_ajedrez * 100)
+    p_musi.set(max_musica * 100)
+    
+    lbl_val_prog.config(text=f"{max_programacion*100:.2f}%")
+    lbl_val_coch.config(text=f"{max_coches*100:.2f}%")
+    lbl_val_ajed.config(text=f"{max_ajedrez*100:.2f}%")
+    lbl_val_musi.config(text=f"{max_musica*100:.2f}%")
+    
+    # 7. Evaluar ganador absoluto
+    max_absoluto = max(max_programacion, max_coches, max_ajedrez, max_musica)
+    
+    if max_absoluto < 0.10: 
+        lbl_veredicto.config(text="TÓPICO NO IDENTIFICADO CLARAMENTE", fg="#ff4d4d")
+    else:
+        if max_absoluto == max_programacion:
+            lbl_veredicto.config(text="TÓPICO DETECTADO: PROGRAMACIÓN 💻", fg="#00ff66")
+        elif max_absoluto == max_coches:
+            lbl_veredicto.config(text="TÓPICO DETECTADO: COCHES 🚗", fg="#00ffff")
+        elif max_absoluto == max_ajedrez:
+            lbl_veredicto.config(text="TÓPICO DETECTADO: AJEDREZ ♟️", fg="#ffcc00")
+        else:
+            lbl_veredicto.config(text="TÓPICO DETECTADO: MÚSICA 🎵", fg="#ff007f")
+
+
+
+# 8. CREACIÓN DE LA VENTANA PRINCIPAL (GUI) - SIEMPRE AL FINAL
+# apartado gráfico
+ventana = tk.Tk()
+ventana.title("Clasificador Inteligente de Tópicos (TF-IDF)")
+ventana.geometry("620x680")
+ventana.configure(bg="#1e1e2e") # Fondo oscuro moderno
+
+# Estilo para las barras de progreso modernas
+estilo = ttk.Style()
+estilo.theme_use('default')
+estilo.configure("TProgressbar", thickness=15, troughcolor="#2d2d3d", borderwidth=0)
+
+# Título de la App
+lbl_titulo = tk.Label(ventana, text="Analizador de Texto Inteligente", font=("Arial", 18, "bold"), bg="#1e1e2e", fg="#ffffff")
+lbl_titulo.pack(pady=15)
+
+# Subtítulo descriptivo
+lbl_sub = tk.Label(ventana, text="Introduce un texto abajo para clasificarlo automáticamente entre los 4 tópicos:", font=("Arial", 10), bg="#1e1e2e", fg="#a0a0b0")
+lbl_sub.pack()
+
+# Caja de Texto del Usuario
+caja_texto = tk.Text(ventana, font=("Arial", 11), bg="#2d2d3d", fg="#ffffff", insertbackground="white", relief="flat", bd=10, height=8, wrap="word")
+caja_texto.pack(pady=15, padx=30, fill="x")
+caja_texto.insert("1.0", "Escribe o pega aquí tu texto...")
+
+# Botón de Acción - Como la función está definida arriba, Pylance ya no da error
+btn_analizar = tk.Button(ventana, text="ANALIZAR TEXTO", font=("Arial", 11, "bold"), bg="#ff007f", fg="white", activebackground="#ff3399", activeforeground="white", relief="flat", cursor="hand2", padx=20, pady=8, command=analizar_texto_usuario)
+btn_analizar.pack(pady=10)
+
+# Frame para agrupar las métricas de resultados
+frame_resultados = tk.Frame(ventana, bg="#252538", bd=2, relief="groove", padx=15, pady=15)
+frame_resultados.pack(pady=15, padx=30, fill="x")
+
+# Variables para controlar las barras
+p_prog, p_coch, p_ajed, p_musi = tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar(), tk.DoubleVar()
+
+def crear_fila_progreso(frame, texto, variable, color, fila):
+    lbl = tk.Label(frame, text=texto, font=("Arial", 10, "bold"), bg="#252538", fg="#ffffff", width=12, anchor="w")
+    lbl.grid(row=fila, column=0, sticky="w", pady=6)
+    
+    estilo.configure(f"{texto}.Horizontal.TProgressbar", background=color)
+    barra = ttk.Progressbar(frame, length=300, mode='determinate', variable=variable, style=f"{texto}.Horizontal.TProgressbar")
+    barra.grid(row=fila, column=1, padx=10, pady=6)
+    
+    lbl_val = tk.Label(frame, text="0.00%", font=("Arial", 10), bg="#252538", fg="#a0a0b0", width=8, anchor="e")
+    lbl_val.grid(row=fila, column=2, sticky="e", pady=6)
+    return lbl_val
+
+# Generar cada fila visual
+lbl_val_prog = crear_fila_progreso(frame_resultados, "Programación", p_prog, "#00ff66", 0)
+lbl_val_coch = crear_fila_progreso(frame_resultados, "Coches", p_coch, "#00ffff", 1)
+lbl_val_ajed = crear_fila_progreso(frame_resultados, "Ajedrez", p_ajed, "#ffcc00", 2)
+lbl_val_musi = crear_fila_progreso(frame_resultados, "Música", p_musi, "#ff007f", 3)
+
+# Panel Inferior del Veredicto Final
+lbl_veredicto_titulo = tk.Label(ventana, text="VEREDICTO FINAL:", font=("Arial", 11, "bold"), bg="#1e1e2e", fg="#a0a0b0")
+lbl_veredicto_titulo.pack(pady=(15, 2))
+
+lbl_veredicto = tk.Label(ventana, text="Esperando texto...", font=("Arial", 14, "bold"), bg="#1e1e2e", fg="#ffffff")
+lbl_veredicto.pack(pady=5)
+
+# Bucle ejecutor de la interfaz
+ventana.mainloop()
